@@ -1,0 +1,83 @@
+.conv-list-page {
+  padding: 0px 14px;
+  padding-bottom: 100px;
+  overflow-y: auto;
+
+  .item {
+    margin-top: 32px;
+    padding: 16px;
+    padding-left: 0px;
+    background-color: #f4f4ec;
+    border-radius: 10px;
+    position: relative;
+    min-height: 78px;
+
+    .avatar {
+      width: 72px;
+      height: 98px;
+      border-radius: 10px;
+      box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.2);
+      border: 3px solid #ffffff;
+      position: absolute;
+      left: 0px;
+      bottom: 0px;
+      overflow: hidden;
+      
+      img {
+        width: 100%;
+        height: 100%;
+      }
+    }
+
+    .user-info {
+      width: 100%;
+      margin-left: 82px;
+
+      .name {
+        font-family: SFPro;
+        justify-content: space-between;
+        margin-bottom: 6px;
+
+        .gender {
+          width: 18px;
+          height: 18px;
+          margin-left: 4px;
+        }
+
+        .text {
+          font-size: 16px;
+          font-weight: bold;
+          color: #0e2635;
+        }
+
+        .time {
+          font-family: PingFangSC;
+          font-size: 10px;
+          color: #0e2635;
+        }
+      }
+
+
+      .content {
+        width: 240px;
+        font-family: PingFangSC;
+        font-size: 12px;
+        font-weight: 300;
+        color: #6f6f6f;
+      }
+    }
+  }
+
+  .empty-text {
+    width: 50%;
+    font-family: PingFangSC;
+    font-size: 16px;
+    font-weight: 600;
+    text-align: center;
+    color: #6f6f6f;
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}

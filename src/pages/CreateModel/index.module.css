@@ -1,0 +1,134 @@
+.main {
+  flex-direction: column;
+  padding-left: 10px;
+  padding-right: 16px;
+  padding-bottom: 25px;
+}
+
+.uploadFileContainer {
+  width: 104px;
+  height: 145px;
+  position: relative;
+}
+
+.uploadFile {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  cursor: pointer;
+  opacity: 0;
+}
+
+.uploadImg {
+  width: 104px;
+  height: 145px;
+  margin: 0 auto;
+  margin-top: 10px;
+}
+
+.avatar {
+  border-radius: 10px;
+  box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.2);
+  border: 3px solid #ffffff;
+}
+
+.inputContainer {
+  width: 100%;
+  border-radius: 10px;
+  border: solid 1px #fff;
+  margin-top: 20px;
+  overflow: hidden;
+}
+
+.title {
+  height: 44px;
+  width: 100%;
+  line-height: 44px;
+  padding-left: 13px;
+  padding-right: 16px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #0e2635;
+  justify-content: space-between;
+  background-color: #efede5;
+}
+
+.random-text img {
+  width: 18px;
+  height: 18px;
+}
+
+span {
+  font-size: 12px;
+  text-align: justify;
+  color: #6f6f6f;
+  margin-left: 2px;
+}
+
+input,
+textarea {
+  border: none;
+  width: 100%;
+  height: 55px;
+  padding: 0 18px;
+  caret-color: #63bda1;
+  background-color: #f4f4ec;
+  font-size: 14px;
+  color: #6f6f6f;
+  display: block;
+}
+
+textarea {
+  height: 140px;
+  padding: 10px 10px 10px 20px;
+  resize: none;
+}
+
+input::placeholder,
+textarea::placeholder {
+  font-size: 12px;
+  color: #a1a1a1;
+}
+
+.gederSelect {
+  height: 55px;
+  background-color: #f4f4ec;
+}
+
+.text {
+  font-size: 16px;
+  font-weight: 600;
+  color: #0e2635;
+  margin-left: 7px;
+  margin-right: 3px;
+}
+
+.male::after {
+  content: '';
+  width: 1px;
+  height: 20px;
+  position: absolute;
+  top: 0px;
+  left: 100%;
+  background: #d7e4db;
+}
+
+.confrimBtn {
+  width: 335px;
+  border-radius: 25px;
+  height: 50px;
+  margin-top: 15px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #fff7d8;
+  background-color: #dddad0;
+  box-shadow: 0px 4px 2px 0px #d2cfc4;
+}
+
+.confrimBtnActive {
+  background-color: #63bda1;
+  box-shadow: 0px 4px 2px 0px #52a68c;
+}

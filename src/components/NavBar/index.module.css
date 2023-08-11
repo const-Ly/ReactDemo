@@ -1,0 +1,45 @@
+.header {
+  width: 100%;
+  padding: 8px 14px;
+  justify-content: space-between !important;
+}
+
+.left {
+  height: 40px;
+  padding: 0 18px;
+  border-radius: 20px;
+  background-color: #63bda1;
+  font-family: PingFangSC;
+  font-size: 20px;
+  font-weight: 600;
+  color: #f6f8e1;
+}
+
+.backIcon {
+  width: 40px;
+  height: 40px;
+  position: absolute;
+  top: 8px;
+  left: 14px;
+}
+
+.content {
+  font-family: PingFangSC;
+  font-size: 16px;
+  font-weight: 600;
+  text-align: justify;
+  color: #0e2635;
+  text-align: center;
+  margin: 0 auto;
+  height: 40px;
+  line-height: 40px;
+}
+
+.right {
+  padding-right: 6px;
+}
+
+.img40 {
+  width: 40px;
+  height: 40px;
+}

@@ -1,0 +1,126 @@
+.chat-list-component {
+  .msg-item {
+    position: relative;
+
+    .me-item {
+      margin-top: 14px;
+      display: flex;
+      justify-content: flex-end;
+
+      .message {
+        max-width: 80%;
+        background-color: #89bdae;
+        padding: 12px 14px;
+        border-radius: 14px;
+        font-size: 14px;
+        color: #fff;
+        word-break: break-all;
+        position: relative;
+      }
+    }
+
+    .you-item {
+      display: flex;
+      justify-content: flex-start;
+      margin-top: 14px;
+
+      .message {
+        max-width: 80%;
+        border-radius: 14px;
+        background-color: #f4f4ec;
+        position: relative;
+
+        .img-con {
+          display: flex;
+          flex-direction: column;
+          align-items: start;
+          margin-top: 10px;
+          margin-left: 14px;
+          object-fit: contain;
+
+          img {
+            // height: 150px;
+            height: 80px;
+            border-radius: 6px;
+            animation: blurToClear 0.5s ease-in-out;
+            /* 定义动画 */
+            object-fit: contain;
+          }
+        }
+
+        .msg-text {
+          display: flex;
+          align-items: center;
+          word-break: break-all;
+          font-family: PingFangSC;
+          font-size: 14px;
+          color: #6f6f6f;
+          padding: 10px 14px;
+          white-space: pre-wrap;
+        }
+
+        .msg-line {
+          width: 88%;
+          height: 2px;
+          margin-left: 6%;
+          background-image: repeating-linear-gradient(
+            to right,
+            transparent,
+            transparent 4px,
+            #d7e4db 4px,
+            #d7e4db 14px
+          );
+        }
+
+        .audio {
+          padding: 10px 17px;
+          justify-content: left;
+
+          .icon {
+            width: 28px;
+            height: 28px;
+            margin-right: 2px;
+          }
+
+          .audio-play-con {
+            // margin-left: 6px;
+            width: 36px;
+            height: 24px;
+
+            img {
+              width: 28px;
+              height: 20px;
+              zoom: 0.9;
+            }
+          }
+
+          .audio-lottie {
+            width: 36px;
+            height: 24px;
+          }
+        }
+
+        .refresh-icon {
+          width: 36px;
+          height: 36px;
+          position: absolute;
+          bottom: 0px;
+          right: -42px;
+        }
+      }
+    }
+
+    .select-back-msg {
+      width: 18px;
+      height: 18px;
+      position: absolute;
+      bottom: 0px;
+      left: -24px;
+
+      img {
+        width: 18px;
+        height: 18px;
+      }
+    }
+  }
+}
