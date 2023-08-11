@@ -1,5 +1,5 @@
 import React, { lazy, Suspense } from "react";
-import { BrowserRouter as Router, Routes, Route, useRoutes } from "react-router-dom";
+import { BrowserRouter as Router, useRoutes } from "react-router-dom";
 
 import AutoScrollToTop from "../components/AutoScrollToTop";
 import MyLoading from "../components/MyLoading";
@@ -29,7 +29,7 @@ function GetRoutes() {
       element: <ConversationList />
     },
     {
-      path:'/conversationDetail',
+      path:'/conversationDetail/:agentId',
       element: <ConversationDetail />
     },
   ])

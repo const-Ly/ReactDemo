@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import TabBar from "@/components/TabBar/TabBar";
@@ -11,37 +11,31 @@ import styles from "./home.module.css";
 
 import { getAgentListApi } from "../../api/list/common";
 
-let agentListState = [];
+let _agentListCache = [];
 
 function Home() {
   const navigate = useNavigate();
-  const [agentData, setAgentData] = useLocalStorageState(
-    "agentData",
-    {}
-  );
+  const [agentData, setAgentData] = useLocalStorageState("agentData", {});
   const [isEmptyPage, setIsEmptyPage] = useState(false);
-  const [agentList, setAgentList] = useState([]);
+  const [agentList, setAgentList] = useState(_agentListCache || []);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     async function getData() {
-      setIsLoading(true)
+      setIsLoading(true);
       const { agents } = await getAgentListApi();
       if (agents.length > 0) {
         setAgentList(agents);
-        setIsLoading(false)
-        agentListState = agents;
-        window.__home_agent_list__ = agents;
+        setIsLoading(false);
+        _agentListCache = agents;
       } else {
-        setIsLoading(false)
+        setIsLoading(false);
         setIsEmptyPage(true);
       }
     }
-
-    if (agentListState.length > 0) {
-    } else {
+    if (_agentListCache.length == 0) {
+      getData();
     }
-    getData();
   }, []);
 
   async function goProfile(item) {
@@ -111,7 +105,7 @@ function Home() {
               );
             })}
           </main>
-   
+
           <TabBar />
         </div>
       )}
