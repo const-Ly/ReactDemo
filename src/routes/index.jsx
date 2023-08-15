@@ -1,5 +1,5 @@
 import React, { lazy, Suspense } from "react";
-import { BrowserRouter as Router, useRoutes } from "react-router-dom";
+import { BrowserRouter as Router, useRoutes, Navigate } from "react-router-dom";
 
 import AutoScrollToTop from "../components/AutoScrollToTop";
 import MyLoading from "../components/MyLoading";
@@ -9,31 +9,34 @@ const ConversationList = lazy(() => import("../pages/ConversationList"));
 const Profile = lazy(() => import("../pages/Profile"));
 const ConversationDetail = lazy(() => import("../pages/ConversationDetail"));
 
-
 function GetRoutes() {
   const routes = useRoutes([
     {
-      path:'/',
-      element: <Home />
+      path: "/",
+      element: <Home />,
     },
     {
-      path:'/profile',
-      element: <Profile />
+      path: "/profile",
+      element: <Profile />,
     },
     {
-      path:'/create',
-      element: <CreateModel />
+      path: "/create",
+      element: <CreateModel />,
     },
     {
-      path:'/conversationList',
-      element: <ConversationList />
+      path: "/conversationList",
+      element: <ConversationList />,
     },
     {
-      path:'/conversationDetail/:agentId',
-      element: <ConversationDetail />
+      path: "/conversationDetail/:agentId",
+      element: <ConversationDetail />,
     },
-  ])
-  return routes
+    {
+      path: "*",
+      element: <Navigate to='/' />,
+    },
+  ]);
+  return routes;
 }
 
 const AppRouter = () => {
