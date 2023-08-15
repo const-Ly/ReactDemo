@@ -2,9 +2,10 @@ import React, { useEffect, useRef, useState, memo } from "react";
 import "./index.less";
 
 import { PlayCircleTwoTone, PauseCircleTwoTone } from "@ant-design/icons";
-
+import { Toast } from "react-vant";
 import * as audioData from "../../../assets/json/audio.json";
 import speak from "../../../utils/speak";
+import { removeParenthesesContent, isIos } from "@/utils/utils";
 
 import TypewriterMessage from "../../../components/TypewriterMessage";
 import ChatMessage from "../ChatMssage";
@@ -25,7 +26,7 @@ const ChatList = memo(
     const [isPlayAudio, setIsPlayAudio] = useState(false);
     const [isEndAudio, setIsEndAudio] = useState(false);
 
-    console.log("ChatList组件更新了");
+    console.log("ChatList组件更新了", isIos);
 
     useEffect(() => {
       onScroll();
@@ -38,15 +39,44 @@ const ChatList = memo(
       msgLastItemRef.current?.scrollIntoView();
     }
 
-    function handleAudioEnd(res) {
+    function handlePlayAudio(item, index) {
+      if (isIos && isPlayAudio) {
+        Toast.info("语音正在播放中...");
+        return;
+      }
+      speak({
+        content: removeParenthesesContent(item.content || typewriterText),
+        endCallback: handleAudioEnd,
+        startCallback: handleAudioStart,
+        voice: voice,
+      });
+      setCurrentClickAudioIndex(index);
+    }
+
+    function handleAudioStart() {
       setIsPlayAudio(true);
-      const audioDuration = (res.audioDuration / 10000000).toFixed(2) - 0.3;
-      audioPlayTimerRef.current = setTimeout(() => {
+    }
+
+    function handleAudioEnd(res) {
+      try {
+        console.log('sss', isIos)
+        if (isIos) {
+          setIsPlayAudio(true);
+          const audioDuration = (res.audioDuration / 10000000).toFixed(2) - 0.3;
+          audioPlayTimerRef.current = setTimeout(() => {
+            clearAudioPlayTimer();
+            setIsPlayAudio(false);
+            setCurrentClickAudioIndex(-1);
+          }, audioDuration * 1000);
+          return;
+        }
         clearAudioPlayTimer();
         setIsEndAudio(!isEndAudio);
         setCurrentClickAudioIndex(-1);
         setIsPlayAudio(false);
-      }, audioDuration * 1000);
+      } catch (error) {
+        console.log(error);
+      }
     }
 
     function clearAudioPlayTimer() {
@@ -97,7 +127,9 @@ const ChatList = memo(
                     <div className="msg-line"></div>
 
                     <div className="audio fl-center">
-                      {isPlayAudio && index == currentClickAudioIndex ? (
+                      {isPlayAudio &&
+                      index == currentClickAudioIndex &&
+                      !isIos ? (
                         // 播放
                         <PauseCircleTwoTone
                           onClick={() => {
@@ -112,14 +144,7 @@ const ChatList = memo(
                         <PlayCircleTwoTone
                           style={{ fontSize: "24px" }}
                           twoToneColor="#89bdae"
-                          onClick={() => {
-                            speak({
-                              item: item,
-                              callback: handleAudioEnd,
-                              voice: voice,
-                            });
-                            setCurrentClickAudioIndex(index);
-                          }}
+                          onClick={() => handlePlayAudio(item, index)}
                         />
                       )}
 
@@ -129,7 +154,6 @@ const ChatList = memo(
                         isEnd={isEndAudio}
                         isPlay={isPlayAudio && index == currentClickAudioIndex}
                       ></LottieAniamtion>
-
                     </div>
                     {/* <!-- 刷新消息 --> */}
                     {index == msgList.length - 1 && (

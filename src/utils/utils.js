@@ -124,6 +124,7 @@ export const isMobile = () => {
   return flag;
 };
 
+
 // 平台类型 1安卓 2ios
 export const getPlatform = (() => {
   let platform = -1;
@@ -143,6 +144,10 @@ export const getPlatform = (() => {
     }
   };
 })();
+
+export const isPc = getPlatform() === 0;
+export const isAndroid = getPlatform() === 1;
+export const isIos = getPlatform() === 2;
 
 // 判断操作系统
 export const getPosType = (() => {
@@ -369,26 +374,30 @@ export const getDateNow = (type = false) => {
   return Math.floor(Date.now() / 1000);
 };
 
-
-export const formatDate1 = (timestamp = '') => {
-  if (!timestamp || timestamp == -1) return ''
-  if (String(timestamp).length == 10) timestamp = timestamp * 1000
-  const date = new Date(Number(timestamp)) // 时间戳为10位需*1000，时间戳为13位的话不需乘1000
-  const Y = date.getFullYear() + '-'
+export const formatDate1 = (timestamp = "") => {
+  if (!timestamp || timestamp == -1) return "";
+  if (String(timestamp).length == 10) timestamp = timestamp * 1000;
+  const date = new Date(Number(timestamp)); // 时间戳为10位需*1000，时间戳为13位的话不需乘1000
+  const Y = date.getFullYear() + "-";
   const M =
     (date.getMonth() + 1 < 10
-      ? '0' + (date.getMonth() + 1)
-      : date.getMonth() + 1) + '-'
+      ? "0" + (date.getMonth() + 1)
+      : date.getMonth() + 1) + "-";
   const D =
-    date.getDate() < 10 ? '0' + date.getDate() + ' ' : date.getDate() + ' '
+    date.getDate() < 10 ? "0" + date.getDate() + " " : date.getDate() + " ";
   const h =
-    date.getHours() < 10 ? '0' + date.getHours() + ':' : date.getHours() + ':'
+    date.getHours() < 10 ? "0" + date.getHours() + ":" : date.getHours() + ":";
   const m =
-    date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes()
+    date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
   // const s = date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds()
-  const currentYear = new Date().getFullYear()
-  if (Y != currentYear + '-') {
-    return Y + M + D + h + m
+  const currentYear = new Date().getFullYear();
+  if (Y != currentYear + "-") {
+    return Y + M + D + h + m;
   }
-  return M + D + h + m
-}
+  return M + D + h + m;
+};
+
+// 去除中英文括号和括号里面的内容
+export const removeParenthesesContent = (str) => {
+  return str.replace(/[\[\(\（][^\[\(\（\]\)\）]*[\]\)\）]/g, "");
+};
