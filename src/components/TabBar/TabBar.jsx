@@ -1,6 +1,8 @@
-import React, { memo } from "react";
+import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import styles from "./index.module.less";
+
+import { useLocalStorageState } from "../../hooks/useLocalStorageState";
 
 const barList = [
   {
@@ -25,7 +27,9 @@ const barList = [
 const TabBar = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  
+
+  const [_, setAgentData] = useLocalStorageState("agentData", {});
+
   console.log("TabBar组件更新了");
   return (
     <>
@@ -35,7 +39,10 @@ const TabBar = () => {
             <div
               key={item.route}
               className={`fl-center ${styles.item}`}
-              onClick={() => navigate(item.route)}
+              onClick={() => {
+                if (item.route == "/create") setAgentData({});
+                navigate(item.route);
+              }}
             >
               <img
                 src={

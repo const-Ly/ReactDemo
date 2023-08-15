@@ -29,7 +29,7 @@ function AddModel() {
   const [agentData, setAgentData] = useLocalStorageState("agentData", {});
   const [avatar, setAvatar] = useState(agentData.avatar || "");
   const [nickname, setNickname] = useState(agentData.nickname || "");
-  const [characters, setCharacters] = useState(agentData.characters.join(""));
+  const [characters, setCharacters] = useState(agentData.characters?.join("")||[]);
   const [gender, setGender] = useState("");
   const [persona, setPersona] = useState(agentData.persona || "");
   const [greeting, setGreeting] = useState(agentData.greeting || "");

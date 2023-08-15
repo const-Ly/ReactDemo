@@ -1,7 +1,10 @@
 import React, { useEffect, useRef, useState, memo } from "react";
 import "./index.less";
 
+import { PlayCircleTwoTone, PauseCircleTwoTone } from "@ant-design/icons";
+
 import * as audioData from "../../../assets/json/audio.json";
+import speak from "../../../utils/speak";
 
 import TypewriterMessage from "../../../components/TypewriterMessage";
 import ChatMessage from "../ChatMssage";
@@ -11,22 +14,46 @@ import LottieAniamtion from "../../../components/LottieAniamtion";
 import { useConvState, useConvDispatch } from "../context";
 
 const ChatList = memo(
-  ({ msgList, typewriterText, onRefreshMsg, onTypeEnd }) => {
+  ({ msgList, typewriterText, voice, onRefreshMsg, onTypeEnd }) => {
+    const audioPlayTimerRef = useRef(null);
     const msgLastItemRef = useRef(null);
 
     const state = useConvState();
     const dispatch = useConvDispatch();
 
     const [currentClickAudioIndex, setCurrentClickAudioIndex] = useState(-1);
+    const [isPlayAudio, setIsPlayAudio] = useState(false);
+    const [isEndAudio, setIsEndAudio] = useState(false);
 
     console.log("ChatList组件更新了");
 
     useEffect(() => {
       onScroll();
+      return () => {
+        speak.playerDestory();
+      };
     }, [msgList]);
 
     function onScroll() {
       msgLastItemRef.current?.scrollIntoView();
+    }
+
+    function handleAudioEnd(res) {
+      setIsPlayAudio(true);
+      const audioDuration = (res.audioDuration / 10000000).toFixed(2) - 0.3;
+      audioPlayTimerRef.current = setTimeout(() => {
+        clearAudioPlayTimer();
+        setIsEndAudio(!isEndAudio);
+        setCurrentClickAudioIndex(-1);
+        setIsPlayAudio(false);
+      }, audioDuration * 1000);
+    }
+
+    function clearAudioPlayTimer() {
+      if (audioPlayTimerRef.current) {
+        clearTimeout(audioPlayTimerRef.current);
+        audioPlayTimerRef.current = null;
+      }
     }
 
     return (
@@ -54,7 +81,7 @@ const ChatList = memo(
                 <div className="you-item">
                   <div className="message">
                     {item.imgUrlList && item.imgUrlList.length > 0 && (
-                      <ChatMessageImg imgs={imgUrlList} />
+                      <ChatMessageImg imgs={item.imgUrlList} />
                     )}
 
                     {!item.content && typewriterText ? (
@@ -68,22 +95,41 @@ const ChatList = memo(
                     )}
 
                     <div className="msg-line"></div>
+
                     <div className="audio fl-center">
-                      <img
-                        onClick={() => {
-                          // playAudio(item, index);
-                          setCurrentClickAudioIndex(index);
-                        }}
-                        src="https://img.cacheserv.com/web/webai/play-icon.png"
-                        className="icon"
-                      />
-                      {index !== currentClickAudioIndex ? (
-                        <div className="audio-play-con fl-center">
-                          <img src="https://img.cacheserv.com/web/webai/play-audio-icon.png" />
-                        </div>
+                      {isPlayAudio && index == currentClickAudioIndex ? (
+                        // 播放
+                        <PauseCircleTwoTone
+                          onClick={() => {
+                            setIsPlayAudio(false);
+                            speak.pause();
+                          }}
+                          style={{ fontSize: "24px" }}
+                          twoToneColor="#89bdae"
+                        />
                       ) : (
-                        <LottieAniamtion src={audioData}></LottieAniamtion>
+                        // 暂停
+                        <PlayCircleTwoTone
+                          style={{ fontSize: "24px" }}
+                          twoToneColor="#89bdae"
+                          onClick={() => {
+                            speak({
+                              item: item,
+                              callback: handleAudioEnd,
+                              voice: voice,
+                            });
+                            setCurrentClickAudioIndex(index);
+                          }}
+                        />
                       )}
+
+                      {/* 语音播放动画 */}
+                      <LottieAniamtion
+                        src={audioData}
+                        isEnd={isEndAudio}
+                        isPlay={isPlayAudio && index == currentClickAudioIndex}
+                      ></LottieAniamtion>
+
                     </div>
                     {/* <!-- 刷新消息 --> */}
                     {index == msgList.length - 1 && (
@@ -123,5 +169,7 @@ const ChatList = memo(
     );
   }
 );
+
+ChatList.displayName = "displayName";
 
 export default ChatList;

@@ -19,6 +19,7 @@ import WaitEnter from "../../components/WaitEnter";
 import More from "./More/More";
 
 const deviceId = getDeviceId();
+const regex = /(https?:\/\/[^\s]+?\.(?:png|jpg|jpeg|gif))/gi;
 
 function ChatDetail() {
   const { agentId } = useParams();
@@ -30,7 +31,7 @@ function ChatDetail() {
   const elementRef = useRef(null); //
   const sendMsgRef = useRef(null);
 
-  const [modelData, setModelData] = useLocalStorageState("agentData", {});
+  const [agentData, _] = useLocalStorageState("agentData", {});
   const [convListPageData, setConvListPageData] = useLocalStorageState(
     "convListPageData",
     []
@@ -45,16 +46,17 @@ function ChatDetail() {
 
   useEffect(() => {
     if (msgList.length == 0) {
-      async function getMsgData() {
-        const newList = await getInitMsg(false);
-        setMsgList(newList);
-        msgDetail[agentId] = newList;
-        setMsgDetail(msgDetail);
-        updateChatListData(newList[newList.length - 1]);
-      }
       getMsgData();
     }
   }, []);
+
+  async function getMsgData() {
+    const newList = await getInitMsg(false);
+    setMsgList(newList);
+    msgDetail[agentId] = newList;
+    setMsgDetail(msgDetail);
+    updateChatListData(newList[newList.length - 1]);
+  }
 
   // 获取参数
   function getQueryParams({ msgId = "", content = "", type = "user" } = {}) {
@@ -80,7 +82,7 @@ function ChatDetail() {
       if (!data.predefined) {
         data.predefined = [];
         data.predefined.unshift(
-          getQueryParams({ content: modelData.greeting, type: "agent" })
+          getQueryParams({ content: agentData.greeting, type: "agent" })
         );
       }
       return data.predefined;
@@ -119,8 +121,17 @@ function ChatDetail() {
       if (!data || !data.answer) data = { answer: getExceptMsg() };
 
       setShowMsgWaitStatus(false);
-      const answerContent = data.answer.content;
+      let answerContent = data.answer.content;
       data.answer.content = "";
+
+      const imgUrlList = [];
+      answerContent = answerContent.replace(regex, (match) => {
+        imgUrlList.push(match);
+        return "";
+      });
+
+      data.answer.imgUrlList = imgUrlList;
+
       setMsgList((prevMsgList) => [...prevMsgList, data.answer]);
       // 逐字显示
       setTypewriterText(answerContent);
@@ -128,6 +139,16 @@ function ChatDetail() {
       setInputDisable(false);
       setShowMsgWaitStatus(false);
     }
+  }
+
+  // 获取异常消息体
+  function getExceptMsg() {
+    return {
+      msgId: uuid(),
+      ts: getDateNow(),
+      content: "网络异常，请刷新",
+      type: "agent",
+    };
   }
 
   // 刷新答案
@@ -156,9 +177,6 @@ function ChatDetail() {
     setInputDisable(false);
     updateChatListData(newMsgList[newMsgList.length - 1]);
   }, [typewriterText, msgList]);
-  // function handleTypeWriterEnd() {
-
-  // }
 
   // 处理回溯消息
   async function handleBacktrackConv(index) {
@@ -199,7 +217,7 @@ function ChatDetail() {
   function updateChatListData(data) {
     let index = convListPageData.findIndex((item) => item.agentId == agentId);
     if (index == -1) {
-      convListPageData.unshift(modelData);
+      convListPageData.unshift(agentData);
       setConvListPageData([...convListPageData]);
       index = 0;
     }
@@ -224,6 +242,7 @@ function ChatDetail() {
             <div style={{ height: "2px" }} ref={elementRef}></div>
             <ChatList
               msgList={msgList}
+              voice={agentData.voice}
               typewriterText={typewriterText}
               onTypeEnd={handleTypeWriterEnd}
               onRefreshMsg={handleRefreshMsg}

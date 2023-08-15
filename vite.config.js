@@ -3,8 +3,7 @@ import react from "@vitejs/plugin-react";
 
 import { fileURLToPath, URL } from "node:url";
 import path from "path";
-import postcssPxtorem from 'postcss-pxtorem'
-
+import postcssPxtorem from "postcss-pxtorem";
 
 import { defineConfig } from "vite";
 import { viteVConsole } from "vite-plugin-vconsole";
@@ -12,10 +11,14 @@ import { viteVConsole } from "vite-plugin-vconsole";
 process.env.VITE_APP_VERSION = require("./package.json").version;
 
 const viteConfig = defineConfig(({ mode }) => {
-  console.log('sss', mode)
+  console.log("sss", mode);
   return {
     plugins: [
-      react(),
+      react({
+        babel: {
+          plugins: ["@babel/plugin-transform-react-jsx"],
+        },
+      }),
       // {
       //   ...postcssConfig,
       //   apply: "build",
@@ -58,6 +61,12 @@ const viteConfig = defineConfig(({ mode }) => {
     },
     build: {
       minify: "terser",
+      rollupOptions: {
+        // 添加 esbuild 的 loader 配置
+        loader: {
+          ".js": "jsx", // 将 '.js' 文件使用 'jsx' loader 解析
+        },
+      },
       terserOptions: {
         compress: {
           drop_console: mode == "production", // env.VITE_APP_MODE === 'production',
@@ -76,8 +85,8 @@ const viteConfig = defineConfig(({ mode }) => {
         plugins: [
           postcssPxtorem({
             rootValue: 37.5, // 1rem的大小
-            propList: ['*'] //需要转换的属性
-          })
+            propList: ["*"], //需要转换的属性
+          }),
         ],
       },
     },
