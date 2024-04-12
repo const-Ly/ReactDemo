@@ -9,7 +9,7 @@ function Login() {
 
   const onFinish = (values) => {
     if (values.username === "admin" && values.password === "123456") {
-      alert("登录成功,自动会创建页面");
+      alert("登录成功,自动去创建页面");
       localStorage.setItem("token", values.username + values.password);
       navigate("/create");
     } else {
