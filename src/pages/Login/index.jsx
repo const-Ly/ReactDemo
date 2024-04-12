@@ -8,9 +8,10 @@ function Login() {
   const [messageApi, contextHolder] = message.useMessage();
 
   const onFinish = (values) => {
-    console.log("Success:", values);
     if (values.username === "admin" && values.password === "123456") {
-      navigate("/home");
+      alert("登录成功,自动会创建页面");
+      localStorage.setItem("token", values.username + values.password);
+      navigate("/create");
     } else {
       messageApi.open({
         type: "error",
