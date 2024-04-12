@@ -16,9 +16,7 @@ function GetRoutes() {
     {
       path: "/login",
       element: (
-        <AuthRoute>
-          <Login />
-        </AuthRoute>
+        <Login />
       ),
     },
     {
