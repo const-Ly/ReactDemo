@@ -33,7 +33,7 @@ function Home() {
         setIsEmptyPage(true);
       }
     }
-    if (_agentListCache.length == 0) {
+    if (!_agentListCache.length && !isLoading && !isEmptyPage) {
       getData();
     }
   }, []);
