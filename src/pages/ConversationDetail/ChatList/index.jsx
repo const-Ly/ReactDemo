@@ -14,8 +14,7 @@ import LottieAniamtion from "../../../components/LottieAniamtion";
 
 import { useConvState, useConvDispatch } from "../context";
 
-const ChatList = memo(
-  ({ msgList, typewriterText, voice, onRefreshMsg, onTypeEnd }) => {
+const ChatList =  ({ msgList, typewriterText, voice, onRefreshMsg, onTypeEnd }) => {
     const audioPlayTimerRef = useRef(null);
     const msgLastItemRef = useRef(null);
 
@@ -191,8 +190,7 @@ const ChatList = memo(
         <div ref={msgLastItemRef} style={{ height: "1px" }}></div>
       </div>
     );
-  }
-);
+}
 
 ChatList.displayName = "displayName";
 
